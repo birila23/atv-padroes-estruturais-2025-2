@@ -18,7 +18,7 @@ public class StreamflixClient {
 
         // Processo complexo e acoplado
         if (auth.authenticate(userId, token)) {
-            byte[] rawVideo = StorageService.downloadFromS3("videos", videoId);
+            byte[] rawVideo = StorageService.dowload("videos", videoId);
             byte[] convertedVideo = converter.convert(rawVideo, "MP4");
             String subs = subtitles.getSubtitles(videoId, "pt-BR");
 

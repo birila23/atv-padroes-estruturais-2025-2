@@ -1,7 +1,7 @@
 package br.edu.ifpb.padroes.atv1.streamflix.services;
 
 public interface StorageService {
-    byte[] downloadFromS3(String location, String fileId);
+    byte[] download(String location, String fileId);
 
-    void uploadToS3(String location, String fileId, byte[] content);
+    void upload(String location, String fileId, byte[] content);
 }
