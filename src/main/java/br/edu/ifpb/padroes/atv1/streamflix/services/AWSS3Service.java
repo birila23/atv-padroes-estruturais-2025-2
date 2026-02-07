@@ -1,16 +1,20 @@
 package br.edu.ifpb.padroes.atv1.streamflix.services;
 
 // Serviço AWS S3
-public class AWSS3Service {
+public class AWSS3Service implements StorageService{
 
-    public byte[] downloadFromS3(String bucketName, String key) {
-        System.out.println("Downloading from S3: " + bucketName + "/" + key);
-        // Simulação de download
-        return new byte[1024];
+    private final AWSS3Service s3service;
+
+    public AWSS3Service(AWSS3Service s3service) {
+        this.s3service = s3service;
     }
 
-    public void uploadToS3(String bucketName, String key, byte[] data) {
-        System.out.println("Uploading to S3: " + bucketName + "/" + key);
+    @Override
+    public byte[] downloadFromS3(String bucketName, String fileId) {
+        return s3service.downloadFromS3(bucketName, fileId);
     }
-
+    @Override
+    public void uploadToS3(String bucketName, String fileId, byte[] data) {
+        s3service.uploadToS3(bucketName, fileId, data);
+    }
 }
