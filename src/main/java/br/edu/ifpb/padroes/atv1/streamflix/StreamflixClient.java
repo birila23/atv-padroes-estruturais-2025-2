@@ -1,6 +1,5 @@
 package br.edu.ifpb.padroes.atv1.streamflix;
 
-
 import br.edu.ifpb.padroes.atv1.streamflix.services.AW3Adapter;
 import br.edu.ifpb.padroes.atv1.streamflix.services.AWSS3Service;
 import br.edu.ifpb.padroes.atv1.streamflix.services.StorageService;
