@@ -4,6 +4,7 @@ import br.edu.ifpb.padroes.atv1.streamflix.auth.AuthenticationService;
 import br.edu.ifpb.padroes.atv1.streamflix.converter.VideoConverter;
 import br.edu.ifpb.padroes.atv1.streamflix.services.StorageService;
 import br.edu.ifpb.padroes.atv1.streamflix.stream.StreamingService;
+import br.edu.ifpb.padroes.atv1.streamflix.stream.StreamingServiceProxy;
 import br.edu.ifpb.padroes.atv1.streamflix.subtitle.SubtitleService;
 
 public class StreamflixFacade {
@@ -12,14 +13,16 @@ public class StreamflixFacade {
     private final StorageService storageService;
     private final VideoConverter converter;
     private final SubtitleService subtitleService;
-    private final StreamingService streamingService;
+    private final StreamingServiceProxy streamingService;
 
     public StreamflixFacade(StorageService storageService) {
         this.authService = new AuthenticationService();
         this.storageService = storageService;
         this.converter = new VideoConverter();
         this.subtitleService = new SubtitleService();
-        this.streamingService = new StreamingService();
+
+        StreamingService realStreamingService = new StreamingService();
+        this.streamingService = new StreamingServiceProxy(realStreamingService);
     }
 
     public void watchVideo(String userId, String token, String videoId) {
@@ -33,8 +36,14 @@ public class StreamflixFacade {
         byte[] convertedVideo = converter.convert(rawVideo, "MP4");
         subtitleService.getSubtitles(videoId, "pt-BR");
 
-        Video video = new Video(videoId, "Movie Title", convertedVideo);
+        VideoComponent video = new Video(videoId, "Movie Title", convertedVideo);
+
+        video = new EncryptionDecorator(video);
+        video = new AnalyticsDecorator(video);
+        video = new WatermarkDecorator(video);
+
         video.play();
-        streamingService.startStream(convertedVideo);
+
+        streamingService.startStream(videoId, convertedVideo);
     }
 }
